@@ -1,16 +1,22 @@
 import debounce from 'lodash.debounce';
 import PNotify from './js/pnotify';
 
-import './styles.css';
+import refs from './js/refs';
+import fetchImageQuery from './js/apiService';
+import markup from './js/gallery-markup';
 
-const refs = {
-  form: document.querySelector('#search-form'),
-  gallery: document.querySelector('.gallery'),
-};
+import './styles.css';
 
 refs.form.addEventListener('input', debounce(onInput, 500));
 
 function onInput(event) {
+  event.preventDefault();
   const query = event.target.value;
-  console.log(query);
+
+  if (query.length === 0) {
+    refs.gallery.innerHTML = '';
+    return;
+  }
+
+  fetchImageQuery(query).then(data => markup(data));
 }
