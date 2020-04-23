@@ -3,7 +3,6 @@ import imageItem from '../templates/image-item.hbs';
 import refs from '../js/refs';
 
 function markup(arr) {
-  console.log(arr);
   refs.gallery.innerHTML = '';
 
   if (arr.length === 0) {
