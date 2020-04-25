@@ -18,6 +18,11 @@ const apiKey = '16159179-9a5d2f4d64cb4ee75e82dc2d4';
 
 function onInput(event) {
   event.preventDefault();
+
+  if (query !== event.target.value) {
+    refs.gallery.innerHTML = '';
+  }
+
   query = event.target.value;
 
   if (query.length === 0) {
@@ -44,8 +49,6 @@ function onOpenModal(event) {
   instance.show();
 }
 
-// ===================================
-
 const infScroll = new InfiniteScroll('.gallery', {
   path: function () {
     return (
@@ -53,7 +56,7 @@ const infScroll = new InfiniteScroll('.gallery', {
       query +
       '&page=' +
       (this.pageIndex + 1) +
-      '&per_page=12&key=' +
+      '&per_page=10&key=' +
       apiKey
     );
   },
@@ -61,7 +64,6 @@ const infScroll = new InfiniteScroll('.gallery', {
 });
 
 infScroll.on('request', function (path) {
-  console.log(path);
   fetch(path)
     .then(res => res.json())
     .then(data => markup(data.hits));
