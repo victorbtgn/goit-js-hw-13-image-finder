@@ -3,7 +3,7 @@ import imageItem from '../templates/image-item.hbs';
 import refs from '../js/refs';
 
 function markup(arr) {
-  refs.gallery.innerHTML = '';
+  // refs.gallery.innerHTML = '';
 
   if (arr.length === 0) {
     PNotify.notice({

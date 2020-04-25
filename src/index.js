@@ -13,22 +13,19 @@ import './styles.css';
 refs.form.addEventListener('input', debounce(onInput, 500));
 refs.gallery.addEventListener('click', onOpenModal);
 
-// let page = 1;
-// let query = '';
+let query = '';
+const apiKey = '16159179-9a5d2f4d64cb4ee75e82dc2d4';
 
 function onInput(event) {
   event.preventDefault();
-  const query = event.target.value;
-  // page = 1;
+  query = event.target.value;
 
   if (query.length === 0) {
     refs.gallery.innerHTML = '';
     return;
   }
 
-  fetchImageQuery(query)
-    .then(data => markup(data))
-    .then(infScroll);
+  fetchImageQuery(query).then(data => markup(data));
 }
 
 function onOpenModal(event) {
@@ -47,19 +44,25 @@ function onOpenModal(event) {
   instance.show();
 }
 
-const apiKey = '16159179-9a5d2f4d64cb4ee75e82dc2d4';
+// ===================================
 
 const infScroll = new InfiniteScroll('.gallery', {
-  pageCount: 1,
   path: function () {
     return (
-      'https://pixabay.com/api/?image_type=photo&orientation=horizontal&page=' +
-      this.pageIndex +
-      '&per_page=5&key=' +
+      'https://cors-anywhere.herokuapp.com/https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=' +
+      query +
+      '&page=' +
+      (this.pageIndex + 1) +
+      '&per_page=12&key=' +
       apiKey
     );
   },
-  append: '.photo-card',
   history: false,
-  // status: '.page-load-status',
+});
+
+infScroll.on('request', function (path) {
+  console.log(path);
+  fetch(path)
+    .then(res => res.json())
+    .then(data => markup(data.hits));
 });
