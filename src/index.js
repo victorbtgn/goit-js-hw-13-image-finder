@@ -3,6 +3,7 @@ import PNotify from './js/pnotify';
 import * as basicLightbox from 'basiclightbox';
 import '../node_modules/basiclightbox/src/styles/main.scss';
 import InfiniteScroll from 'infinite-scroll';
+import imageItem from './templates/image-item.hbs';
 
 import refs from './js/refs';
 import fetchImageQuery from './js/apiService';
@@ -60,11 +61,21 @@ const infScroll = new InfiniteScroll('.gallery', {
       apiKey
     );
   },
+  responseType: 'text',
   history: false,
 });
 
-infScroll.on('request', function (path) {
-  fetch(path)
-    .then(res => res.json())
-    .then(data => markup(data.hits));
+infScroll.on('load', function (res) {
+  const data = JSON.parse(res);
+  const arr = data.hits;
+
+  markup(arr);
 });
+
+// =============================
+
+// infScroll.on('request', function (path) {
+//   fetch(path)
+//     .then(res => res.json())
+//     .then(data => markup(data.hits));
+// });
